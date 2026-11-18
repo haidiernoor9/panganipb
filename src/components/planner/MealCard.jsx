@@ -4,34 +4,27 @@ import { formatPrice } from '../../utils/nutritionCalculator';
 
 const MEAL_CONFIG = {
   breakfast: {
-    label: '',
-    icon: Sunrise,
+    icon: null,
     headerBg: 'bg-amber-50',
     headerText: 'text-amber-800',
     borderColor: 'border-amber-200',
-    badgeBg: 'bg-amber-100 text-amber-800',
   },
   lunch: {
-    label: '',
-    icon: Sun,
+    icon: null,
     headerBg: 'bg-emerald-50',
     headerText: 'text-emerald-800',
     borderColor: 'border-emerald-200',
-    badgeBg: 'bg-emerald-100 text-emerald-800',
   },
   dinner: {
-    label: '',
-    icon: Moon,
+    icon: null,
     headerBg: 'bg-indigo-50',
     headerText: 'text-indigo-800',
     borderColor: 'border-indigo-200',
-    badgeBg: 'bg-indigo-100 text-indigo-800',
   },
 };
 
 export default function MealCard({ meal, mealType, nutrition, restaurant }) {
   const config = MEAL_CONFIG[mealType] || MEAL_CONFIG.lunch;
-  const Icon = config.icon;
 
   if (!meal) {
     return (
