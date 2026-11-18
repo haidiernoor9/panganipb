@@ -1,30 +1,37 @@
 import React from 'react';
-import { MapPin, Activity } from 'lucide-react';
+import { Sunrise, Sun, Moon, MapPin, Activity } from 'lucide-react';
 import { formatPrice } from '../../utils/nutritionCalculator';
 
 const MEAL_CONFIG = {
   breakfast: {
-    icon: null,
+    label: 'Sarapan',
+    icon: Sunrise,
     headerBg: 'bg-amber-50',
     headerText: 'text-amber-800',
     borderColor: 'border-amber-200',
+    badgeBg: 'bg-amber-100 text-amber-800',
   },
   lunch: {
-    icon: null,
+    label: 'Makan Siang',
+    icon: Sun,
     headerBg: 'bg-emerald-50',
     headerText: 'text-emerald-800',
     borderColor: 'border-emerald-200',
+    badgeBg: 'bg-emerald-100 text-emerald-800',
   },
   dinner: {
-    icon: null,
+    label: 'Makan Malam',
+    icon: Moon,
     headerBg: 'bg-indigo-50',
     headerText: 'text-indigo-800',
     borderColor: 'border-indigo-200',
+    badgeBg: 'bg-indigo-100 text-indigo-800',
   },
 };
 
 export default function MealCard({ meal, mealType, nutrition, restaurant }) {
   const config = MEAL_CONFIG[mealType] || MEAL_CONFIG.lunch;
+  const Icon = config.icon;
 
   if (!meal) {
     return (
@@ -38,7 +45,13 @@ export default function MealCard({ meal, mealType, nutrition, restaurant }) {
     <div className={`rounded-xl border ${config.borderColor} bg-white shadow-sm overflow-hidden flex flex-col h-full hover:shadow-md transition`}>
       {/* Meal Period Header */}
       <div className={`px-4 py-2.5 ${config.headerBg} border-b ${config.borderColor} flex items-center justify-between`}>
-        <span className={`text-xs font-semibold ${config.headerText}`}>
+        <div className="flex items-center gap-2">
+          <Icon className={`w-4 h-4 ${config.headerText}`} />
+          <span className={`text-xs font-bold uppercase tracking-wider ${config.headerText}`}>
+            {config.label}
+          </span>
+        </div>
+        <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-white/80 text-slate-700 shadow-2xs">
           {formatPrice(meal.price)}
         </span>
       </div>
