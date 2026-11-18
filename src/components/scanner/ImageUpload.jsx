@@ -69,6 +69,7 @@ export default function ImageUpload({ onImageSelect, isLoading }) {
           ref={fileInputRef}
           type="file"
           accept="image/jpeg,image/png,image/webp"
+          capture="environment"
           onChange={handleChange}
           disabled={isLoading}
           className="hidden"

@@ -172,10 +172,10 @@ export default async function handler(req, res) {
       },
     });
 
-    const prompt = `Identifikasi hidangan makanan khas Indonesia dalam gambar ini.
+    const prompt = `Identifikasi makanan dalam gambar ini (makanan Indonesia maupun internasional).
 Kembalikan HANYA format JSON valid tanpa kata pengantar atau markdown lain:
 {
-  "primaryFood": "nama hidangan Indonesia (contoh: Nasi Goreng, Ayam Geprek, Sayur Asem, Bakso)",
+  "primaryFood": "nama hidangan (contoh: Nasi Goreng, Pizza, Burger,寿司)",
   "confidence": "high",
   "alternatives": ["alternatif nama 1", "alternatif nama 2"],
   "description": "deskripsi singkat dalam 1 kalimat"

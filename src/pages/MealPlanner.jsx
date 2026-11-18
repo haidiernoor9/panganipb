@@ -16,6 +16,7 @@ import BudgetSummary from '../components/planner/BudgetSummary';
 import {
   getRecommendations,
   calculateNutritionSummary,
+  generateTwoMealCombinations,
 } from '../services/recommendationService';
 import { getRestaurantById, getNutritionForFood } from '../services/foodService';
 
@@ -26,6 +27,7 @@ export default function MealPlanner() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [hasSearched, setHasSearched] = useState(false);
+  const [isTwoMealMode, setIsTwoMealMode] = useState(false);
 
   // Initial load with default Rp 25.000 budget
   useEffect(() => {
@@ -37,6 +39,7 @@ export default function MealPlanner() {
     setErrorMessage('');
     setCurrentBudget(budget);
     setHasSearched(true);
+    setIsTwoMealMode(false);
 
     // Simulate snappy calculation
     setTimeout(() => {
@@ -46,13 +49,39 @@ export default function MealPlanner() {
         setSelectedIndex(0);
         setErrorMessage('');
       } else {
+        // Fallback or offer 2-meal mode
+        const twoMealRes = generateTwoMealCombinations(budget);
+        if (twoMealRes.length > 0) {
+          setRecommendations(twoMealRes);
+          setSelectedIndex(0);
+          setIsTwoMealMode(true);
+          setErrorMessage('');
+        } else {
+          setRecommendations([]);
+          setErrorMessage(
+            res.message ||
+              `Tidak ditemukan kombinasi dalam budget Rp ${budget.toLocaleString(
+                'id-ID'
+              )}. Coba naikkan sedikit budget harian.`
+          );
+        }
+      }
+      setIsLoading(false);
+    }, 250);
+  };
+
+  const handleForceTwoMeal = (budget) => {
+    setIsLoading(true);
+    setIsTwoMealMode(true);
+    setTimeout(() => {
+      const twoMealRes = generateTwoMealCombinations(budget);
+      if (twoMealRes.length > 0) {
+        setRecommendations(twoMealRes);
+        setSelectedIndex(0);
+        setErrorMessage('');
+      } else {
         setRecommendations([]);
-        setErrorMessage(
-          res.message ||
-            `Tidak ditemukan kombinasi sarapan, makan siang, dan makan malam dalam budget Rp ${budget.toLocaleString(
-              'id-ID'
-            )}. Coba naikkan sedikit budget harian.`
-        );
+        setErrorMessage(`Budget terlalu kecil bahkan untuk 2 kali makan.`);
       }
       setIsLoading(false);
     }, 250);
@@ -83,8 +112,23 @@ export default function MealPlanner() {
         isLoading={isLoading}
         initialBudget={currentBudget}
       />
-
-      {/* Results Section */}
+      
+      {/* Two Meal Mode Button - only show if no three meal results */}
+      {!isTwoMealMode && recommendations.length === 0 && (
+        <div className="bg-white rounded-2xl border border-slate-200 p-4 text-center space-y-3">
+          <div className="flex items-center justify-center gap-2 text-slate-600">
+            <Wallet className="w-4 h-4" />
+            <span className="text-xs">Budget harian Anda terlalu rendah untuk 3 kali makan?</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => handleForceTwoMeal(15000)}
+            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold transition"
+          >
+            Aktifkan Mode Hemat (2 Kali Makan)
+          </button>
+        </div>
+      )}
       {isLoading ? (
         <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center space-y-3">
           <div className="w-12 h-12 bg-emerald-100 rounded-full mx-auto flex items-center justify-center text-emerald-600 animate-spin">
@@ -114,6 +158,40 @@ export default function MealPlanner() {
             >
               Coba Budget Rp 30.000
             </button>
+          </div>
+        </div>
+      ) : isTwoMealMode ? (
+        <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 space-y-4">
+          <div className="flex items-center gap-2 text-emerald-800">
+            <Award className="w-5 h-5" />
+            <h3 className="font-bold text-base">Mode 2 Waktu Makan (Budget Hemat)</h3>
+          </div>
+          <p className="text-xs text-slate-700">
+            Mode hemat memungkinkan 2 kali makan yang seimbang (contoh: Sarapan + Makan Malam) yang sesuai dengan budget harian rendah Anda.
+          </p>
+          <div className="bg-white rounded-xl border border-emerald-200 p-4 space-y-3">
+            {/* Two meals display */}
+            <div className="grid grid-cols-2 gap-3">
+              <MealCard
+                meal={activePlan?.lunch}
+                mealType="lunch"
+                nutrition={activePlan?.lunch ? getNutritionForFood(activePlan.lunch) : null}
+                restaurant={activePlan?.lunch ? getRestaurantById(activePlan.lunch?.restaurantId) : null}
+              />
+              <MealCard
+                meal={activePlan?.dinner}
+                mealType="dinner"
+                nutrition={activePlan?.dinner ? getNutritionForFood(activePlan.dinner) : null}
+                restaurant={activePlan?.dinner ? getRestaurantById(activePlan.dinner?.restaurantId) : null}
+              />
+            </div>
+            <div className="pt-3 border-t border-emerald-100">
+              <BudgetSummary
+                combination={activePlan}
+                budget={currentBudget}
+                nutritionSummary={activePlanNutrition}
+              />
+            </div>
           </div>
         </div>
       ) : activePlan ? (

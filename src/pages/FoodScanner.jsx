@@ -103,7 +103,7 @@ export default function FoodScanner() {
           AI Food Scanner & Kurasi Gizi
         </h1>
         <p className="text-xs sm:text-sm text-slate-600 mt-1">
-          Identifikasi hidangan Indonesia menggunakan penglihatan AI, lalu periksa kandungan gizi resmi dari database kurasi kami.
+          Identifikasi hidangan dari seluruh dunia menggunakan penglihatan AI, lalu periksa kandungan gizi resmi dari database kurasi kami.
         </p>
       </div>
 

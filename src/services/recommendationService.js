@@ -4,8 +4,44 @@ import {
 } from './foodService';
 
 // ============================================================
-// Helpers – meal-type filtered available foods
+// Two-meal combination generation (Alternative)
 // ============================================================
+
+/**
+ * Generate 2-meal combinations (e.g., Brunch + Dinner)
+ */
+export function generateTwoMealCombinations(budget) {
+  const allFoods = getAvailableFoods().filter(f => f.price != null && f.price > 0);
+  const combinations = [];
+
+  for (let i = 0; i < allFoods.length; i++) {
+    for (let j = i + 1; j < allFoods.length; j++) {
+      const b1 = allFoods[i];
+      const b2 = allFoods[j];
+      const total = b1.price + b2.price;
+      
+      if (total <= budget) {
+        // Map to { breakfast, lunch, dinner } structure for compatibility
+        // Use lunch for first, dinner for second, breakfast = null
+        const combo = { breakfast: null, lunch: b1, dinner: b2 };
+        combinations.push(combo);
+      }
+    }
+  }
+
+  const scored = combinations.map((combo) => ({
+    ...combo,
+    totalPrice: calculateTotalPrice(combo),
+    finalScore: calculateFinalScore(combo, budget),
+  }));
+
+  scored.sort((a, b) => b.finalScore - a.finalScore);
+  return scored.slice(0, 5);
+}
+
+
+// ============================================================
+// Helpers – meal-type filtered available foods
 
 /**
  * Returns available foods (valid price, not unavailable) for a specific
