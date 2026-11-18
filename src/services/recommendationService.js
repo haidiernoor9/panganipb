@@ -281,9 +281,9 @@ export function generateMealCombinations(budget) {
     finalScore: calculateFinalScore(combo, budget),
   }));
 
-  scored.sort((a, b) => b.finalScore - a.finalScore);
-
-  return scored.slice(0, 50);
+  // Randomize so each search yields fresh combinations, keep top 20
+  const shuffled = scored.sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, 20);
 }
 
 /**
