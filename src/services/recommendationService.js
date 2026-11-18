@@ -336,7 +336,7 @@ export function getRecommendations(budget) {
     };
   }
 
-  // --- Generate & rank ---
+  // Generate & rank with randomization for each refresh
   const combos = generateMealCombinations(numBudget);
 
   if (combos.length === 0) {
@@ -350,9 +350,12 @@ export function getRecommendations(budget) {
 
   const ranked = rankRecommendations(combos, numBudget);
 
+  // Shuffle / randomize top candidates so every refresh provides fresh choices
+  const shuffled = [...ranked].sort(() => Math.random() - 0.5);
+
   return {
     success: true,
-    recommendations: ranked.slice(0, 5),
-    message: `Ditemukan ${Math.min(ranked.length, 5)} rekomendasi terbaik.`,
+    recommendations: shuffled.slice(0, 5),
+    message: `Ditemukan ${Math.min(shuffled.length, 5)} rekomendasi terbaik.`,
   };
 }
