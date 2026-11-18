@@ -154,5 +154,44 @@
     "menuIds": ["food-025"],
     "verified": true,
     "lastUpdated": "2026-11-18"
+  },
+  {
+    "id": "vendor-013",
+    "name": "Rebusan",
+    "category": "Kaki Lima",
+    "address": "Jl. Babakan Raya No.150, Babakan, Kec. Dramaga, Kabupaten Bogor",
+    "latitude": -6.560712384154191, 
+    "longitude": 106.7319442164766,
+    "openingHours": "07:00 - 20:00",
+    "rating": null,
+    "menuIds": ["food-026"],
+    "verified": true,
+    "lastUpdated": "2026-11-18"
+  },
+  {
+    "id": "vendor-014",
+    "name": "Tahu Ayam Suwir",
+    "category": "Kaki Lima",
+    "address": "Jl. Lkr. Kampus IPB Dramaga No.117, Babakan, Kec. Dramaga, Kabupaten Bogor",
+    "latitude": -6.558776512078242, 
+    "longitude": 106.7315470179734,
+    "openingHours": "08:00 - 19:00",
+    "rating": null,
+    "menuIds": ["food-027"],
+    "verified": true,
+    "lastUpdated": "2026-11-18"
+  },
+  {
+    "id": "vendor-015",
+    "name": "Warung Pak Jenggot",
+    "category": "Warung",
+    "address": "Jl. Cangkurawok, RT.4/RW.4, Babakan, Kec. Dramaga, Kabupaten Bogor",
+    "latitude": -6.5507091854962765, 
+    "longitude": 106.73296274581575,
+    "openingHours": "08:00 - 21:00",
+    "rating": null,
+    "menuIds": ["food-028"],
+    "verified": true,
+    "lastUpdated": "2026-11-18"
   }
 ]
