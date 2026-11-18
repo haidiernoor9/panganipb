@@ -213,13 +213,14 @@ export function calculateVarietyScore(combination) {
     score += 11;
   }
 
-  // --- No repeated food names (5 pts) — relaxed; repeats within a day are OK ---
+  // --- No repeated food names within a single day (40 pts) ---
   const names = meals.map((f) => (f.name || '').toLowerCase().trim());
   const uniqueNames = new Set(names);
   if (uniqueNames.size === meals.length) {
-    score += 5;
+    score += 40;
   } else {
-    score += Math.round(5 * (uniqueNames.size / meals.length));
+    // Partial credit based on uniqueness ratio
+    score += Math.round(40 * (uniqueNames.size / meals.length));
   }
 
   return score;
