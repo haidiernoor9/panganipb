@@ -1,10 +1,10 @@
 import React from 'react';
-import { Sunrise, Sun, Moon, MapPin, Activity } from 'lucide-react';
+import { MapPin, Activity } from 'lucide-react';
 import { formatPrice } from '../../utils/nutritionCalculator';
 
 const MEAL_CONFIG = {
   breakfast: {
-    label: 'Sarapan',
+    label: '',
     icon: Sunrise,
     headerBg: 'bg-amber-50',
     headerText: 'text-amber-800',
@@ -12,7 +12,7 @@ const MEAL_CONFIG = {
     badgeBg: 'bg-amber-100 text-amber-800',
   },
   lunch: {
-    label: 'Makan Siang',
+    label: '',
     icon: Sun,
     headerBg: 'bg-emerald-50',
     headerText: 'text-emerald-800',
@@ -20,7 +20,7 @@ const MEAL_CONFIG = {
     badgeBg: 'bg-emerald-100 text-emerald-800',
   },
   dinner: {
-    label: 'Makan Malam',
+    label: '',
     icon: Moon,
     headerBg: 'bg-indigo-50',
     headerText: 'text-indigo-800',
@@ -45,13 +45,7 @@ export default function MealCard({ meal, mealType, nutrition, restaurant }) {
     <div className={`rounded-xl border ${config.borderColor} bg-white shadow-sm overflow-hidden flex flex-col h-full hover:shadow-md transition`}>
       {/* Meal Period Header */}
       <div className={`px-4 py-2.5 ${config.headerBg} border-b ${config.borderColor} flex items-center justify-between`}>
-        <div className="flex items-center gap-2">
-          <Icon className={`w-4 h-4 ${config.headerText}`} />
-          <span className={`text-xs font-bold uppercase tracking-wider ${config.headerText}`}>
-            {config.label}
-          </span>
-        </div>
-        <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-white/80 text-slate-700 shadow-2xs">
+        <span className={`text-xs font-semibold ${config.headerText}`}>
           {formatPrice(meal.price)}
         </span>
       </div>
