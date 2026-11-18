@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Sparkles, AlertCircle } from 'lucide-react';
 import { validateBudget } from '../../utils/budgetCalculator';
 
 export default function BudgetInput({ onSubmit, isLoading, initialBudget = 25000 }) {
   const [budget, setBudget] = useState(initialBudget ? String(initialBudget) : '');
   const [error, setError] = useState('');
+
+  // Keep input in sync when the parent budget changes (e.g. "budget +5000")
+  useEffect(() => {
+    setBudget(initialBudget ? String(initialBudget) : '');
+  }, [initialBudget]);
 
   const quickBudgets = [20000, 25000, 30000, 40000];
 

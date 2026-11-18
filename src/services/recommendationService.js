@@ -35,8 +35,9 @@ export function generateTwoMealCombinations(budget) {
     finalScore: calculateFinalScore(combo, budget),
   }));
 
-  scored.sort((a, b) => b.finalScore - a.finalScore);
-  return scored.slice(0, 5);
+  // Randomize so each search yields fresh combinations, keep top 20
+  const shuffled = scored.sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, 20);
 }
 
 
@@ -355,7 +356,7 @@ export function getRecommendations(budget) {
 
   return {
     success: true,
-    recommendations: shuffled.slice(0, 5),
-    message: `Ditemukan ${Math.min(shuffled.length, 5)} rekomendasi terbaik.`,
+    recommendations: shuffled.slice(0, 20),
+    message: `Ditemukan ${Math.min(shuffled.length, 20)} rekomendasi terbaik.`,
   };
 }

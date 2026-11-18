@@ -144,7 +144,11 @@ export default function MealPlanner() {
           <div className="pt-2">
             <button
               type="button"
-              onClick={() => handleSearchBudget(currentBudget + 5000)}
+              onClick={() => {
+                const next = currentBudget + 5000;
+                setMealMode(mealMode); // keep mode
+                handleSearchBudget(next);
+              }}
               className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold transition"
             >
               Coba Budget Naik Rp 5.000
