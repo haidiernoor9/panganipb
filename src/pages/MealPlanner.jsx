@@ -4,7 +4,6 @@ import {
   Sparkles,
   AlertCircle,
   Award,
-  ChevronRight,
   TrendingUp,
   Layers,
   Heart,
@@ -27,71 +26,55 @@ export default function MealPlanner() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [hasSearched, setHasSearched] = useState(false);
-  const [isTwoMealMode, setIsTwoMealMode] = useState(false);
+  const [mealMode, setMealMode] = useState('3'); // '3' or '2'
 
-  // Initial load with default Rp 25.000 budget
+  // Reset selection and rebuild when mode changes
   useEffect(() => {
-    handleSearchBudget(25000);
-  }, []);
+    if (hasSearched) handleSearchBudget(currentBudget);
+  }, [mealMode]);
 
   const handleSearchBudget = (budget) => {
     setIsLoading(true);
     setErrorMessage('');
     setCurrentBudget(budget);
     setHasSearched(true);
-    setIsTwoMealMode(false);
 
-    // Simulate snappy calculation
     setTimeout(() => {
-      const res = getRecommendations(budget);
-      if (res.success && res.recommendations.length > 0) {
-        setRecommendations(res.recommendations);
-        setSelectedIndex(0);
-        setErrorMessage('');
+      let res;
+      if (mealMode === '2') {
+        res = generateTwoMealCombinations(budget);
+        // normalize to same shape as 3-meal recommendations
+        res = res.map((c) => ({ ...c, breakfast: null }));
       } else {
-        // Fallback or offer 2-meal mode
-        const twoMealRes = generateTwoMealCombinations(budget);
-        if (twoMealRes.length > 0) {
-          setRecommendations(twoMealRes);
-          setSelectedIndex(0);
-          setIsTwoMealMode(true);
-          setErrorMessage('');
-        } else {
-          setRecommendations([]);
-          setErrorMessage(
-            res.message ||
-              `Tidak ditemukan kombinasi dalam budget Rp ${budget.toLocaleString(
-                'id-ID'
-              )}. Coba naikkan sedikit budget harian.`
-          );
-        }
+        res = getRecommendations(budget);
+        res = res.recommendations ?? [];
       }
-      setIsLoading(false);
-    }, 250);
-  };
 
-  const handleForceTwoMeal = (budget) => {
-    setIsLoading(true);
-    setIsTwoMealMode(true);
-    setTimeout(() => {
-      const twoMealRes = generateTwoMealCombinations(budget);
-      if (twoMealRes.length > 0) {
-        setRecommendations(twoMealRes);
+      if (res.length > 0) {
+        setRecommendations(res);
         setSelectedIndex(0);
         setErrorMessage('');
       } else {
         setRecommendations([]);
-        setErrorMessage(`Budget terlalu kecil bahkan untuk 2 kali makan.`);
+        const label = mealMode === '2' ? '2' : '3';
+        setErrorMessage(
+          `Tidak ditemukan kombinasi ${label} kali makan dalam budget Rp ${budget.toLocaleString('id-ID')}. Coba naikkan sedikit budget harian.`
+        );
       }
       setIsLoading(false);
     }, 250);
   };
 
   const activePlan = recommendations[selectedIndex] || null;
-
   const activePlanNutrition = activePlan
     ? calculateNutritionSummary(activePlan)
     : null;
+
+  const modeLabel = mealMode === '3' ? '3 Waktu Makan' : '2 Waktu Makan';
+  const modeDesc =
+    mealMode === '3'
+      ? 'Dapatkan kombinasi 3 waktu makan (Sarapan, Siang, & Malam) yang tidak melebihi anggaran Anda dengan gizi optimal.'
+      : 'Dapatkan kombinasi 2 waktu makan (Siang + Malam) yang pas dan bergizi sesuai anggaran Anda.';
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-12">
@@ -101,9 +84,33 @@ export default function MealPlanner() {
           <UtensilsCrossed className="w-6 h-6 text-emerald-600" />
           Rekomendasi Menu Harian Seimbang
         </h1>
-        <p className="text-xs sm:text-sm text-slate-600 mt-1">
-          Dapatkan kombinasi 3 waktu makan (Sarapan, Siang, & Malam) yang tidak melebihi anggaran Anda dengan gizi optimal.
-        </p>
+        <p className="text-xs sm:text-sm text-slate-600 mt-1">{modeDesc}</p>
+      </div>
+
+      {/* Meal Mode Toggle */}
+      <div className="flex items-center gap-2 bg-white rounded-2xl border border-slate-200 p-1.5 w-fit">
+        <button
+          type="button"
+          onClick={() => setMealMode('3')}
+          className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 ${
+            mealMode === '3'
+              ? 'bg-emerald-600 text-white shadow-sm'
+              : 'text-slate-500 hover:bg-slate-50'
+          }`}
+        >
+          🍽️ 3 Kali Makan
+        </button>
+        <button
+          type="button"
+          onClick={() => setMealMode('2')}
+          className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 ${
+            mealMode === '2'
+              ? 'bg-emerald-600 text-white shadow-sm'
+              : 'text-slate-500 hover:bg-slate-50'
+          }`}
+        >
+          🥣 2 Kali Makan
+        </button>
       </div>
 
       {/* Budget Form */}
@@ -112,23 +119,7 @@ export default function MealPlanner() {
         isLoading={isLoading}
         initialBudget={currentBudget}
       />
-      
-      {/* Two Meal Mode Button - only show if no three meal results */}
-      {!isTwoMealMode && recommendations.length === 0 && (
-        <div className="bg-white rounded-2xl border border-slate-200 p-4 text-center space-y-3">
-          <div className="flex items-center justify-center gap-2 text-slate-600">
-            <Wallet className="w-4 h-4" />
-            <span className="text-xs">Budget harian Anda terlalu rendah untuk 3 kali makan?</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => handleForceTwoMeal(15000)}
-            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold transition"
-          >
-            Aktifkan Mode Hemat (2 Kali Makan)
-          </button>
-        </div>
-      )}
+
       {isLoading ? (
         <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center space-y-3">
           <div className="w-12 h-12 bg-emerald-100 rounded-full mx-auto flex items-center justify-center text-emerald-600 animate-spin">
@@ -153,45 +144,11 @@ export default function MealPlanner() {
           <div className="pt-2">
             <button
               type="button"
-              onClick={() => handleSearchBudget(30000)}
+              onClick={() => handleSearchBudget(currentBudget + 5000)}
               className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold transition"
             >
-              Coba Budget Rp 30.000
+              Coba Budget Naik Rp 5.000
             </button>
-          </div>
-        </div>
-      ) : isTwoMealMode ? (
-        <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 space-y-4">
-          <div className="flex items-center gap-2 text-emerald-800">
-            <Award className="w-5 h-5" />
-            <h3 className="font-bold text-base">Mode 2 Waktu Makan (Budget Hemat)</h3>
-          </div>
-          <p className="text-xs text-slate-700">
-            Mode hemat memungkinkan 2 kali makan yang seimbang (contoh: Sarapan + Makan Malam) yang sesuai dengan budget harian rendah Anda.
-          </p>
-          <div className="bg-white rounded-xl border border-emerald-200 p-4 space-y-3">
-            {/* Two meals display */}
-            <div className="grid grid-cols-2 gap-3">
-              <MealCard
-                meal={activePlan?.lunch}
-                mealType="lunch"
-                nutrition={activePlan?.lunch ? getNutritionForFood(activePlan.lunch) : null}
-                restaurant={activePlan?.lunch ? getRestaurantById(activePlan.lunch?.restaurantId) : null}
-              />
-              <MealCard
-                meal={activePlan?.dinner}
-                mealType="dinner"
-                nutrition={activePlan?.dinner ? getNutritionForFood(activePlan.dinner) : null}
-                restaurant={activePlan?.dinner ? getRestaurantById(activePlan.dinner?.restaurantId) : null}
-              />
-            </div>
-            <div className="pt-3 border-t border-emerald-100">
-              <BudgetSummary
-                combination={activePlan}
-                budget={currentBudget}
-                nutritionSummary={activePlanNutrition}
-              />
-            </div>
           </div>
         </div>
       ) : activePlan ? (
@@ -235,27 +192,44 @@ export default function MealPlanner() {
             </div>
           </div>
 
-          {/* Three Meal Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <MealCard
-              meal={activePlan.breakfast}
-              mealType="breakfast"
-              nutrition={getNutritionForFood(activePlan.breakfast)}
-              restaurant={getRestaurantById(activePlan.breakfast?.restaurantId)}
-            />
-            <MealCard
-              meal={activePlan.lunch}
-              mealType="lunch"
-              nutrition={getNutritionForFood(activePlan.lunch)}
-              restaurant={getRestaurantById(activePlan.lunch?.restaurantId)}
-            />
-            <MealCard
-              meal={activePlan.dinner}
-              mealType="dinner"
-              nutrition={getNutritionForFood(activePlan.dinner)}
-              restaurant={getRestaurantById(activePlan.dinner?.restaurantId)}
-            />
-          </div>
+          {/* Meal Cards Grid — adapts to mode */}
+          {mealMode === '2' ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <MealCard
+                meal={activePlan.lunch}
+                mealType="lunch"
+                nutrition={activePlan?.lunch ? getNutritionForFood(activePlan.lunch) : null}
+                restaurant={activePlan?.lunch ? getRestaurantById(activePlan.lunch.restaurantId) : null}
+              />
+              <MealCard
+                meal={activePlan.dinner}
+                mealType="dinner"
+                nutrition={activePlan?.dinner ? getNutritionForFood(activePlan.dinner) : null}
+                restaurant={activePlan?.dinner ? getRestaurantById(activePlan.dinner.restaurantId) : null}
+              />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <MealCard
+                meal={activePlan.breakfast}
+                mealType="breakfast"
+                nutrition={getNutritionForFood(activePlan.breakfast)}
+                restaurant={getRestaurantById(activePlan.breakfast?.restaurantId)}
+              />
+              <MealCard
+                meal={activePlan.lunch}
+                mealType="lunch"
+                nutrition={getNutritionForFood(activePlan.lunch)}
+                restaurant={getRestaurantById(activePlan.lunch?.restaurantId)}
+              />
+              <MealCard
+                meal={activePlan.dinner}
+                mealType="dinner"
+                nutrition={getNutritionForFood(activePlan.dinner)}
+                restaurant={getRestaurantById(activePlan.dinner?.restaurantId)}
+              />
+            </div>
+          )}
 
           {/* Budget & Nutrition Summary */}
           <BudgetSummary
