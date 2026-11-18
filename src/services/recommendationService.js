@@ -274,15 +274,21 @@ export function generateMealCombinations(budget) {
     }
   }
 
-  // Score and sort; keep top 50
+  // Score and sort
   const scored = combinations.map((combo) => ({
     ...combo,
     totalPrice: calculateTotalPrice(combo),
     finalScore: calculateFinalScore(combo, budget),
   }));
 
-  // Randomize so each search yields fresh combinations, keep top 20
-  const shuffled = scored.sort(() => Math.random() - 0.5);
+  // Sort by finalScore DESC, then randomize within top tiers to get variations
+  // that are close to the budget cap.
+  scored.sort((a, b) => b.finalScore - a.finalScore);
+
+  // Take top 40 best scores, then shuffle those to give variety
+  const topCandidates = scored.slice(0, 40);
+  const shuffled = topCandidates.sort(() => Math.random() - 0.5);
+
   return shuffled.slice(0, 20);
 }
 
