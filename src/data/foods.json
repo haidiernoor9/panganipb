@@ -46,7 +46,7 @@
   {
     "id": "food-005",
     "restaurantId": "vendor-002",
-    "name": "Nasi Sepuasnya dan Menu berbeda tergantung hari",
+    "name": "Nasi sepuasnya dan menu berbeda tergantung hari",
     "mealType": "lunch",
     "price": 10000,
     "nutritionId": "nutrition-005",
@@ -79,7 +79,7 @@
   {
     "id": "food-008",
     "restaurantId": "vendor-003",
-    "name": "Sop ayam jagung Wortel",
+    "name": "Sop Ayam Jagung Wortel",
     "mealType": "breakfast",
     "price": 7000,
     "nutritionId": "nutrition-008",
@@ -137,7 +137,7 @@
     "name": "Roti",
     "mealType": "lunch",
     "price": 4000,
-    "nutritionId": "nutrition-012",
+    "nutritionId": "nutrition-013",
     "image": null,
     "available": true,
     "category": "makanan_ringan"
@@ -148,7 +148,7 @@
     "name": "Nasi Uduk",
     "mealType": "breakfast",
     "price": 12000,
-    "nutritionId": "nutrition-003",
+    "nutritionId": "nutrition-014",
     "image": null,
     "available": true,
     "category": "makanan_berat"
@@ -159,7 +159,7 @@
     "name": "Ayam Goreng Kremes",
     "mealType": "lunch",
     "price": 18000,
-    "nutritionId": "nutrition-013",
+    "nutritionId": "nutrition-015",
     "image": null,
     "available": true,
     "category": "makanan_berat"
@@ -170,7 +170,7 @@
     "name": "Gado-gado",
     "mealType": "lunch",
     "price": 12000,
-    "nutritionId": "nutrition-014",
+    "nutritionId": "nutrition-016",
     "image": null,
     "available": true,
     "category": "makanan_berat"
@@ -181,7 +181,7 @@
     "name": "Lontong Sayur",
     "mealType": "lunch",
     "price": 10000,
-    "nutritionId": null,
+    "nutritionId": "nutrition-017",
     "image": null,
     "available": true,
     "category": "makanan_ringan"
@@ -192,7 +192,7 @@
     "name": "Ayam Geprek",
     "mealType": "lunch",
     "price": 10000,
-    "nutritionId": "nutrition-015",
+    "nutritionId": "nutrition-018",
     "image": null,
     "available": true,
     "category": "makanan_berat"
@@ -203,7 +203,7 @@
     "name": "Nasi Telur Dadar Kornet",
     "mealType": "lunch",
     "price": 10000,
-    "nutritionId": "nutrition-016",
+    "nutritionId": "nutrition-019",
     "image": null,
     "available": true,
     "category": "makanan_berat"
@@ -214,7 +214,7 @@
     "name": "Steak",
     "mealType": "lunch",
     "price": 16000,
-    "nutritionId": "nutrition-017",
+    "nutritionId": "nutrition-020",
     "image": null,
     "available": true,
     "category": "lauk"
@@ -225,7 +225,7 @@
     "name": "Soto Mie Daging",
     "mealType": "lunch",
     "price": 16000,
-    "nutritionId": "nutrition-018",
+    "nutritionId": "nutrition-021",
     "image": null,
     "available": true,
     "category": "makanan_berat"
@@ -236,7 +236,7 @@
     "name": "Sate Madura",
     "mealType": "Dinner",
     "price": 25000,
-    "nutritionId": "nutrition-019",
+    "nutritionId": "nutrition-022",
     "image": null,
     "available": true,
     "category": "makanan_berat"
@@ -247,14 +247,14 @@
     "name": "Aneka Masakan Padang",
     "mealType": "lunch",
     "price": 15000,
-    "nutritionId": "nutrition-020",
+    "nutritionId": "nutrition-023",
     "image": null,
     "available": false,
     "category": "makanan_berat"
   },
   {
     "id": "food-024",
-    "restaurantId": "vendor-011",
+    "restaurantId": "vendor-024",
     "name": "Aneka Makanan Warteg",
     "mealType": "lunch",
     "price": 12000,
@@ -269,7 +269,7 @@
     "name": "Aneka Masakan Warteg",
     "mealType": "lunch",
     "price": 10000,
-    "nutritionId": "nutrition-022",
+    "nutritionId": "nutrition-025",
     "image": null,
     "available": true,
     "category": "makanan_berat"
@@ -280,7 +280,7 @@
     "name": "Aneka Rebusan",
     "mealType": "lunch",
     "price": 2000,
-    "nutritionId": "nutrition-023",
+    "nutritionId": "nutrition-026",
     "image": null,
     "available": true,
     "category": "lauk"
@@ -291,7 +291,7 @@
     "name": "Tahu Ayam Suwir",
     "mealType": "lunch",
     "price": 2000,
-    "nutritionId": "nutrition-024",
+    "nutritionId": "nutrition-027",
     "image": null,
     "available": true,
     "category": "cemilan"
@@ -299,10 +299,10 @@
   {
     "id": "food-028",
     "restaurantId": "vendor-015",
-    "name": "Rata-Rata Harga Menu",
+    "name": "Nasi dan aneka lauk",
     "mealType": "Dinner",
     "price": 12000,
-    "nutritionId": null,
+    "nutritionId": "nutrition-028",
     "image": null,
     "available": true,
     "category": "makanan_berat"
